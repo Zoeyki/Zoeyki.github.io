@@ -30,7 +30,115 @@ Audio feature learning with triplet-based embedding network
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<p>Audio feature learning with triplet-based embedding network</p>
+<h1>Audio feature learning with triplet-based embedding network</h1>
+<h2>Motivation</h2>
+<p>  Existing methods on audio version identification use hand-crafted features, which requires extensive human efforts and experts participation. We propose a triplet-based network for version identification, learning feature representation for a  music automatically.  Triplet-based neural network can learn segment-level features from training data, focusing on the most similar parts between music versions, thereby identical version of a music is detected easily. Extensive experiments demonstrate the effectiveness of our method.</p>
+<h2>Background</h2>
+<p>  A version of a music is a new performance of a previous
+work. Given a query audio piece, version identification aims
+to retrieve all the versions in a database. Music version identification
+has wide application, especially in music copyright
+monitoring, while it remains challenging due to the variances
+in tempo, key, instruments, etc. Previous work mainly
+focus on extracting features from pitch class profiles or
+chroma, which well capture the tonal content of a music,
+and have been proved to be more effective than original audio
+spectrums descriptors such as Mel-frequency cepstrum
+coefficients.</p>
+<p>  Most version identification algorithms use some form
+of dynamic time-warping(DTW)(Serra 2011). Thierry et
+al.(Bertin-Mahieux and Ellis 2011) extracted hash code
+called ’jump code’ from beat-aligned chroma. Balen et al.
+(van Balen et al. 2014) proposed cognition-inspired descriptors
+as audio features. From then on, more methods such as
+information theoretic measures have been proposed with little
+performance improvement. Having seen the glass-ceiling
+for hand-crafted features, we thus turn to machine learning
+algorithms for higher learning capability to bridge the semantic
+gap in the long term.</p>
+<p>  Version identification is basically a problem of similarity
+metric learning. To this end, our goal is to embed the data to
+a feature space where versions of the same music are close
+to each other and music from different versions stay relatively
+far away. We propose a triplet-based neural network,
+which learns audio similarity from triplet input containing a
+query audio piece, a same version and a different version. In
+addition, in order to match music accurately, we conduct the
+learning process on segment-level instead of song-level. The experiment results demonstrate that our method outperforms
+hand-crafted ones. Our contribution can be summarized into
+two-folds. 1) To our knowledge, this is the first time that a
+triplet deep learning method has been applied to audio metric
+learning. 2) We propose an end-to-end framework and
+the triplet-based network shall be applicable for large-scale
+commercial use due to its high efficiency and great potential
+as the amount of audio data grows.</p>
+<h2>Method formulation</h2>
+<p>  Given a training set $\mathcal{D}=\{ (a_i, v_i )\}_{i=1}^N$, where $a_{i} = \{e_{j,k}\}_{l\times d}$ is an audio track, and $v_{i}$ denotes the version it belongs to. $e_{j,k} \in (0,1) $ indicates audio energy of different frequency bands. $l$ is audio duration and $d$ is the number of frequency bands. Our goal is to learn a similarity metric $S(\cdot,\cdot)$ with $\mathcal{D} $ in order to make a prediction of the similarity degree given a new music pair $( a_j, a_k)$.</p>
+
+<p>  It is impractical to train a classifier for each kind of version since the amount of music of a version is relatively small and the version amount keeps increasing with new music being created. To solve this problem, we learn by distance comparison within triplets. Furthermore, we experiment on segment-level for more precise learning.</p>
+
+<p>  Our framework includes two parts. Firstly, we construct triplets set $\mathcal{\tilde D}$ from $\mathcal{D} $ on segment-level. $\mathcal{\tilde D}=\{ (x_i, x_i^+, x_i^- ) \}_{i=1}^N$, where $x_{i}$ is a music segment, and $x_i^+$ denotes a same version of $x_i$, while $x_i^-$ represents a non-version one. Then, we embed audio with a triplet-based network and form the similarity metric on the embedded feature.</p>
+<h3>Audio segmentation and triplets generation</h3>
+<p>  We conduct audio segmentation and construct triplets set. We experiment on segment-level for two reasons, focusing on the most significant music part and solving the problem that audio versions of different genres usually vary in length while triplets should have equal length. We encode audio tracks and build an index for efficient segment retrieval to construct triplets.
+<p>  1. A song is originally represented as a sequence of beat-aligned 12-dimensional chroma vectors. For easy indexing and computational simplicity, chroma vectors are encoded into binary codes, in a way that the dissimilarity between two original vectors is well approximated by the Hamming distance between the two codes. Concretely, the code of a vector contains two parts. One part concerns the vector itself, consisting of four 12-bit sub-codes. In each sub-code, the bits corresponding to the top m largest bins of the vector are set to 1 and others 0, with m being 6, 5, 3 and 1 respectively. The other part of a code represents the average of the neighbors of the vector. The average vector is encoded in a similar way but with a lower resolution. As a result, a chroma vector is represented by a 64-bit binary code.</p>
+<p>  2. Create a music version dataset D={x_1,x_2,…,x_N }, in which song x_i (i∈[1..N]) is represented by a sequence of 64-bit codes, and build a codes index which indicates the occurrences of each unique code in all the songs in D. The codes index is only based on the first parts of codes, without considering the code part for the average vector.</p>
+<p>  3. Given a pair of songs (S_q,S_l) in D, which are versions of the same song, and S_q being the query song, divide S_q into segments of length l, with step size d.</p>
+<p>  4. For each segment of S_q, find its nearest one in S_l. The details of the process are as follows. For each code in a S_q segment, find out through the index all occurrences in S_l of the code (and its transpositions), and then, for each occurrence, calculate the Hamming distance between the S_q segment and the occurrence-aligned S_l segment, keeping the order of codes when matching codes between the segments.</p>
+<p>  5. Generate pairs of similar chroma segments betweenS_q and S_l. Only segment pairs with a similarity larger than the threshold u will be selected. For each similar segment pair, randomly select a chroma segment from a different song, to make a chroma segment triplet.</p>
+<p>  6. Return the generated chroma segment triplets.</p>
+
+
+
+<p>  Then, we divide $a_{i}$ into segments $x_i,i=1,2...n$ of length $l$, with step size $d$. For each code in a segment $x_{i}$, find out through the index all occurrences of the code in $a_j$, calculate the Hamming distance between the $x_{i}$ segment and the occurrence-aligned $x_i^+$ segment. Generate pairs of similar music segments between $x_{i}$ and $x_i^+$.</p>
+
+<h3>Triplet-based network feature learning</h3>
+<p>  We propose a triplet-based embedding neural network for audio metric learning. Given an audio triplet $ (x_i, x_i^+, x_i^- )$, triplet-based neural network embeds them to a vector space, generating $f(x_i), f(x_i^+)$ and $f(x_i^-)$ respectively. Specifically, as we show in Figure 1, $f(\cdot)$ consists of two convolution layers, with Relu as activation function, followed by two max-pooling layers and two full connection layers. With the audio embeddings, we adopt the online distance metric learning algorithm with cosine similarity proposed in (Wu et al.
+2013). The similarity function is denoted as follows:</p>
+\begin{equation}
+S(x_{i},x_{j})=f(x_{i})^{T}f(x_{j})/(||f(x_{i})||\times ||f(x_{j})||)
+\end{equation}
+The hinge loss (Wan et al. 2014) is defined as:
+\begin{equation}
+L(D;\theta)=\sum_{i=1}^N max(1-S(x_{i},x_i^+)+S(x_{i},x_i^-),0)
+\end{equation}
+where $\theta$ represents all of the parameters in our model, and $N$ denotes the number of training instances. $\theta$ is updated by back-propagation and each base network in the triplet network share the same architecture and parameter weights.
+<h2>Experiment</h2>
+<p>  We use the SecondHandSongs dataset (SHSD) which is an official list of cover songs within the Million Song Dataset (MSD) released in 2011. SHSD is the largest public cover song dataset up to now, including 18196 tracks in 5854 cliques. To build our model, we use the training split of SHSD dataset with 11460 tracks and test on the standard Query1500 testing set (including 500 triplets).</p>
+
+<p>  We clip the training audios into segments and experiment on length from 100 to 700 with a step of 50. We randomly sampled 1,000,000 triplets for training and 100,000 for testing, $10$ to $100$ times of our network parameter number complexity which is $O(10^{4})$.</p>
+
+<p>  We experiment on various parameter weights and set the convolution kernel size to 3, pooling size and stride both to 2 for best performance. The first full connection layer has 100 nodes and the second has 50 nodes as output. The triplet network is implemented with Caffe.</p>
+
+<p>  We test the model on the Query1500 data set which is given in the form of $(x_{i},x_i^+,x_i^-)$, first two of the same version and the third different from the first. We calculate querying accuracy by comparing the similarity function results $S(x_{i}, x_i^+)$ and $S(x_{i}, x_i^-)$.</p>
+\begin{equation}
+Acc=\frac{1}{T} \sum_{i=1}^T g(S(x_{i},x_i^+) - S(x_{i},x_i^-))
+\end{equation}
+where $g(c)=1$ if $c<0$ and $g(c)=0$ otherwise. $T$ denotes the number of testing instances. The experiment results are listed below.
+<table border="1px" bordercolor="#000000" cellspacing="0px" style="border-collapse:collapse" align="center">
+<tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
+<tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
+</table>
+<h2>Reference</h2>
+<p>Bertin-Mahieux, T., and Ellis, D. P. 2011. Large-scale cover
+song recognition using hashed chroma landmarks. In 2011
+IEEE Workshop on Applications of Signal Processing to Audio
+and Acoustics (WASPAA), 117–120. IEEE.
+<p>Serra, J. 2011. Identification of versions of the same musical
+composition by processing audio descriptions. Department
+of Information and Communication Technologies.
+<p>van Balen, J.; Bountouridis, D.; Wiering, F.; Veltkamp,
+R. C.; et al. 2014. Cognition-inspired descriptors for scalable
+cover song retrieval. In proceedings of the 15th international
+conference on Music Information Retrieval.
+<p>Wan, J.; Wang, D.; Hoi, S. C. H.; Wu, P.; Zhu, J.; Zhang,
+Y.; and Li, J. 2014. Deep learning for content-based image
+retrieval: A comprehensive study. In Proceedings of the
+22nd ACM international conference on Multimedia, 157–
+166. ACM.
+<p>Wu, P.; Hoi, S. C.; Xia, H.; Zhao, P.;Wang, D.; and Miao, C.
+2013. Online multimodal deep similarity learning with application
+to image retrieval. In Proceedings of the 21st ACM
+international conference on Multimedia, 153–162. ACM.
 <!-- content end -->
 </div>
 <br>
