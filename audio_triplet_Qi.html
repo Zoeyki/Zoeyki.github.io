@@ -73,7 +73,7 @@ the triplet-based network shall be applicable for large-scale
 commercial use due to its high efficiency and great potential
 as the amount of audio data grows.</p>
 <h2>Method formulation</h2>
-	<!--l. 71--><p class="noindent" >Given a training set <span 
+<!--l. 71--><p class="noindent" >Given a training set <span 
 class="cmsy-10"><img 
 src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span><span 
 class="cmr-10">= </span><span 
@@ -172,6 +172,11 @@ class="cmmi-7">i</span></sub><sup><span
 class="cmsy-7">-</span></sup> represents a non-version one. Then, we embed
      audio with a triplet-based network and form the similarity metric
      on the embedded feature.
+<p>  Given a training set $\mathcal{D}=\{ (a_i, v_i )\}_{i=1}^N$, where $a_{i} = \{e_{j,k}\}_{l\times d}$ is an audio track, and $v_{i}$ denotes the version it belongs to. $e_{j,k} \in (0,1) $ indicates audio energy of different frequency bands. $l$ is audio duration and $d$ is the number of frequency bands. Our goal is to learn a similarity metric $S(\cdot,\cdot)$ with $\mathcal{D} $ in order to make a prediction of the similarity degree given a new music pair $( a_j, a_k)$.</p>
+
+<p>  It is impractical to train a classifier for each kind of version since the amount of music of a version is relatively small and the version amount keeps increasing with new music being created. To solve this problem, we learn by distance comparison within triplets. Furthermore, we experiment on segment-level for more precise learning.</p>
+
+<p>  Our framework includes two parts. Firstly, we construct triplets set $\mathcal{\tilde D}$ from $\mathcal{D} $ on segment-level. $\mathcal{\tilde D}=\{ (x_i, x_i^+, x_i^- ) \}_{i=1}^N$, where $x_{i}$ is a music segment, and $x_i^+$ denotes a same version of $x_i$, while $x_i^-$ represents a non-version one. Then, we embed audio with a triplet-based network and form the similarity metric on the embedded feature.</p>
 <h3>Audio segmentation and triplets generation</h3>
 <p>  We conduct audio segmentation and construct triplets set. We experiment on segment-level for two reasons, focusing on the most significant music part and solving the problem that audio versions of different genres usually vary in length while triplets should have equal length. We encode audio tracks and build an index for efficient segment retrieval to construct triplets.
 <p>  1. A song is originally represented as a sequence of beat-aligned 12-dimensional chroma vectors. For easy indexing and computational simplicity, chroma vectors are encoded into binary codes, in a way that the dissimilarity between two original vectors is well approximated by the Hamming distance between the two codes. Concretely, the code of a vector contains two parts. One part concerns the vector itself, consisting of four 12-bit sub-codes. In each sub-code, the bits corresponding to the top m largest bins of the vector are set to 1 and others 0, with m being 6, 5, 3 and 1 respectively. The other part of a code represents the average of the neighbors of the vector. The average vector is encoded in a similar way but with a lower resolution. As a result, a chroma vector is represented by a 64-bit binary code.</p>
@@ -181,22 +186,228 @@ class="cmsy-7">-</span></sup> represents a non-version one. Then, we embed
 <p>  5. Generate pairs of similar chroma segments betweenS_q and S_l. Only segment pairs with a similarity larger than the threshold u will be selected. For each similar segment pair, randomly select a chroma segment from a different song, to make a chroma segment triplet.</p>
 <p>  6. Return the generated chroma segment triplets.</p>
 
-
-
-<p>  Then, we divide $a_{i}$ into segments $x_i,i=1,2...n$ of length $l$, with step size $d$. For each code in a segment $x_{i}$, find out through the index all occurrences of the code in $a_j$, calculate the Hamming distance between the $x_{i}$ segment and the occurrence-aligned $x_i^+$ segment. Generate pairs of similar music segments between $x_{i}$ and $x_i^+$.</p>
-
 <h3>Triplet-based network feature learning</h3>
-<p>  We propose a triplet-based embedding neural network for audio metric learning. Given an audio triplet $ (x_i, x_i^+, x_i^- )$, triplet-based neural network embeds them to a vector space, generating $f(x_i), f(x_i^+)$ and $f(x_i^-)$ respectively. Specifically, as we show in Figure 1, $f(\cdot)$ consists of two convolution layers, with Relu as activation function, followed by two max-pooling layers and two full connection layers. With the audio embeddings, we adopt the online distance metric learning algorithm with cosine similarity proposed in (Wu et al.
-2013). The similarity function is denoted as follows:</p>
-\begin{equation}
-S(x_{i},x_{j})=f(x_{i})^{T}f(x_{j})/(||f(x_{i})||\times ||f(x_{j})||)
-\end{equation}
-The hinge loss (Wan et al. 2014) is defined as:
-\begin{equation}
-L(D;\theta)=\sum_{i=1}^N max(1-S(x_{i},x_i^+)+S(x_{i},x_i^-),0)
-\end{equation}
-where $\theta$ represents all of the parameters in our model, and $N$ denotes the number of training instances. $\theta$ is updated by back-propagation and each base network in the triplet network share the same architecture and parameter weights.
+We propose a
+triplet-based embedding neural network for audio metric
+learning. Given an audio triplet <span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmr-7">+</span></sup><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmsy-7">-</span></sup><span 
+class="cmr-10">)</span>, triplet-based
+neural network embeds them to a vector space, generating
+<span 
+class="cmmi-10">f</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmr-10">)</span><span 
+class="cmmi-10">,f</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmr-7">+</span></sup><span 
+class="cmr-10">) </span>and <span 
+class="cmmi-10">f</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmsy-7">-</span></sup><span 
+class="cmr-10">) </span>respectively. Specifically, as we show
+in Figure 1, <span 
+class="cmmi-10">f</span><span 
+class="cmr-10">(</span><span 
+class="cmsy-10">&#x22C5;</span><span 
+class="cmr-10">) </span>consists of two convolution layers, with Relu as
+activation function, followed by two max-pooling layers and two
+full connection layers. With the audio embeddings, we adopt the
+online distance metric learning algorithm with cosine similarity
+proposed in <span class="cite">(<a 
+href="#Xwu2013online">Wu et al mbox .<img 
+src="Images/aaai4x.png" alt=":¯  "  class="b" >mbox  2013</a>)</span>. The similarity
+function is denoted as follows:
+  <table 
+class="equation"><tr><td><a 
+ id="x1-2002r1"></a>
+  <center class="math-display" >
+<img 
+src="Images/aaai5x.png" alt="S(xi,xj) = f (xi)Tf(xj)&#x2215;(||f(xi)||&#x00D7; ||f(xj)||)
+" class="math-display" ></center></td><td class="equation-label">(1)</td></tr></table>
+The hinge loss <span class="cite">(<a 
+href="#Xwan2014deep">Wan et al mbox .<img 
+src="Images/aaai6x.png" alt=":¯  "  class="b" >mbox  2014</a>)</span> is defined
+as:
+  <table 
+class="equation"><tr><td><a 
+ id="x1-2003r2"></a>
+  <center class="math-display" >
+<img 
+src="Images/aaai7x.png" alt="          N
+         &#x2211;                +         -
+L (D; &#x03B8;) =   max (1- S(xi,xi )+ S(xi,xi ),0)
+         i=1
+    " class="math-display" ></center></td><td class="equation-label">(2)</td></tr></table>
+     where <span 
+class="cmmi-10">&#x03B8; </span>represents all of the parameters in our model, and <span 
+class="cmmi-10">N</span>
+   denotes the number of training instances. <span 
+class="cmmi-10">&#x03B8; </span>is updated by
+     back-propagation and each base network in the triplet network
+     share the same architecture and parameter weights.
+<hr class="figure"><div class="figure" 
+>
+                                                
+                                                                                                
+                                                                                                
+<a 
+ id="x1-2001r1"></a>
+  &#x00A0;
+                                                
+                                                                                                
+                                                                                                
+<img 
+src="Images/framework.pdf" alt="PIC" class="graphics"><!--tex4ht:graphics  
+name="aaai3x.png" src="framework.pdf"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;1: </span><span  
+class="content">Triplet network</span></div><!--tex4ht:label?: x1-2001r1 -->
+  &#x00A0;
+                                                
+                                                                                                
+                                                                                                
+  </div><hr class="endfigure">
 <h2>Experiment</h2>
+<!--l. 102--><p class="noindent" >We use the SecondHandSongs dataset (SHSD) which is an
+     official list of cover songs within the Million Song Dataset
+     (MSD) released in 2011. SHSD is the largest public cover song
+     dataset up to now, including 18196 tracks in 5854 cliques. To
+     build our model, we use the training split of SHSD dataset with
+     11460 tracks and test on the standard Query1500 testing set
+     (including 500 triplets).
+     <!--l. 104--><p class="indent" >    We clip the training audios into segments and experiment on
+     length from 100 to 700 with a step of 50. We randomly sampled
+     1,000,000 triplets for training and 100,000 for testing, <span 
+class="cmr-10">10 </span>to <span 
+class="cmr-10">100</span>
+    times of our network parameter number complexity which is
+     <span 
+class="cmmi-10">O</span><span 
+class="cmr-10">(10</span><sup><span 
+class="cmr-7">4</span></sup><span 
+class="cmr-10">)</span>.
+     <!--l. 106--><p class="indent" >    We experiment on various parameter weights and set the
+     convolution kernel size to 3, pooling size and stride both to 2 for
+     best performance. The first full connection layer has 100 nodes
+     and the second has 50 nodes as output. The triplet network is
+     implemented with Caffe.
+     <!--l. 108--><p class="indent" >    We test the model on the Query1500 data set which is given in
+     the form of <span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmr-7">+</span></sup><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmsy-7">-</span></sup><span 
+class="cmr-10">)</span>, first two of the same version and the
+     third different from the first. We calculate querying accuracy by
+     comparing the similarity function results <span 
+class="cmmi-10">S</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmr-7">+</span></sup><span 
+class="cmr-10">) </span>and
+     <span 
+class="cmmi-10">S</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmsy-7">-</span></sup><span 
+class="cmr-10">)</span>.
+         <table 
+class="equation"><tr><td><a 
+ id="x1-3001r3"></a>
+         <center class="math-display" >
+     <img 
+src="Images/aaai8x.png" alt="        T&#x2211;
+Acc = 1-   g(S (xi,x+i )- S (xi,x-i ))
+      T i=1
+    " class="math-display" ></center></td><td class="equation-label">(3)</td></tr></table>
+     <!--l. 111--><p class="nopar" >
+     where <span 
+class="cmmi-10">g</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">c</span><span 
+class="cmr-10">) = 1 </span>if <span 
+class="cmmi-10">c &#x003C; </span><span 
+class="cmr-10">0 </span>and <span 
+class="cmmi-10">g</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">c</span><span 
+class="cmr-10">) = 0 </span>otherwise. <span 
+class="cmmi-10">T </span>denotes the
+     number of testing instances. The experiment results are listed in
+     Table 1.
+         <div class="table">
+                                                                                                
+                                                                                                
+<!--l. 114--><p class="indent" >  <a 
+ id="x1-3002r1"></a><hr class="float"><div class="float" 
+>
+                                                
+                                                                                                
+                                                                                                
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"></colgroup><colgroup id="TBL-2-2g"><col 
+id="TBL-2-2"></colgroup><colgroup id="TBL-2-3g"><col 
+id="TBL-2-3"></colgroup><colgroup id="TBL-2-4g"><col 
+id="TBL-2-4"></colgroup><colgroup id="TBL-2-5g"><col 
+id="TBL-2-5"></colgroup><colgroup id="TBL-2-6g"><col 
+id="TBL-2-6"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-1"  
+class="td11"> Method  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-2"  
+class="td11"> Jump codes  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-3"  
+class="td11"> DTW   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-4"  
+class="td11"> Cognition  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-5"  
+class="td11"> Triplet  </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-1"  
+class="td11">  Acc      </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-2"  
+class="td11">   77.4%       </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-3"  
+class="td11"> 80.0%  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-4"  
+class="td11">  73.2%     </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-5"  
+class="td11"> 81.2%   </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-1"  
+class="td11">        </td></tr></table></div>
+<br /><div class="caption" 
+><span class="id">Table&#x00A0;1: </span><span  
+class="content">Performances on Query1500</span></div><!--tex4ht:label?: x1-3002r1 -->
+                                                
+                                                                                                
+                                                                                                
+  </div><hr class="endfloat" />
+  </div>
+<a 
+ id="Q1-1-6"></a>
 <p>  We use the SecondHandSongs dataset (SHSD) which is an official list of cover songs within the Million Song Dataset (MSD) released in 2011. SHSD is the largest public cover song dataset up to now, including 18196 tracks in 5854 cliques. To build our model, we use the training split of SHSD dataset with 11460 tracks and test on the standard Query1500 testing set (including 500 triplets).</p>
 
 <p>  We clip the training audios into segments and experiment on length from 100 to 700 with a step of 50. We randomly sampled 1,000,000 triplets for training and 100,000 for testing, $10$ to $100$ times of our network parameter number complexity which is $O(10^{4})$.</p>
