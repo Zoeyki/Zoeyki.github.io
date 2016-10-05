@@ -172,11 +172,6 @@ class="cmmi-7">i</span></sub><sup><span
 class="cmsy-7">-</span></sup> represents a non-version one. Then, we embed
      audio with a triplet-based network and form the similarity metric
      on the embedded feature.
-<p>  Given a training set $\mathcal{D}=\{ (a_i, v_i )\}_{i=1}^N$, where $a_{i} = \{e_{j,k}\}_{l\times d}$ is an audio track, and $v_{i}$ denotes the version it belongs to. $e_{j,k} \in (0,1) $ indicates audio energy of different frequency bands. $l$ is audio duration and $d$ is the number of frequency bands. Our goal is to learn a similarity metric $S(\cdot,\cdot)$ with $\mathcal{D} $ in order to make a prediction of the similarity degree given a new music pair $( a_j, a_k)$.</p>
-
-<p>  It is impractical to train a classifier for each kind of version since the amount of music of a version is relatively small and the version amount keeps increasing with new music being created. To solve this problem, we learn by distance comparison within triplets. Furthermore, we experiment on segment-level for more precise learning.</p>
-
-<p>  Our framework includes two parts. Firstly, we construct triplets set $\mathcal{\tilde D}$ from $\mathcal{D} $ on segment-level. $\mathcal{\tilde D}=\{ (x_i, x_i^+, x_i^- ) \}_{i=1}^N$, where $x_{i}$ is a music segment, and $x_i^+$ denotes a same version of $x_i$, while $x_i^-$ represents a non-version one. Then, we embed audio with a triplet-based network and form the similarity metric on the embedded feature.</p>
 <h3>Audio segmentation and triplets generation</h3>
 <p>  We conduct audio segmentation and construct triplets set. We experiment on segment-level for two reasons, focusing on the most significant music part and solving the problem that audio versions of different genres usually vary in length while triplets should have equal length. We encode audio tracks and build an index for efficient segment retrieval to construct triplets.
 <p>  1. A song is originally represented as a sequence of beat-aligned 12-dimensional chroma vectors. For easy indexing and computational simplicity, chroma vectors are encoded into binary codes, in a way that the dissimilarity between two original vectors is well approximated by the Hamming distance between the two codes. Concretely, the code of a vector contains two parts. One part concerns the vector itself, consisting of four 12-bit sub-codes. In each sub-code, the bits corresponding to the top m largest bins of the vector are set to 1 and others 0, with m being 6, 5, 3 and 1 respectively. The other part of a code represents the average of the neighbors of the vector. The average vector is encoded in a similar way but with a lower resolution. As a result, a chroma vector is represented by a 64-bit binary code.</p>
@@ -227,9 +222,7 @@ class="cmr-10">) </span>consists of two convolution layers, with Relu as
 activation function, followed by two max-pooling layers and two
 full connection layers. With the audio embeddings, we adopt the
 online distance metric learning algorithm with cosine similarity
-proposed in <span class="cite">(<a 
-href="#Xwu2013online">Wu et al mbox .<img 
-src="Images/aaai4x.png" alt=":¯  "  class="b" >mbox  2013</a>)</span>. The similarity
+proposed in (Wu et al). The similarity
 function is denoted as follows:
   <table 
 class="equation"><tr><td><a 
@@ -238,9 +231,7 @@ class="equation"><tr><td><a
 <img 
 src="Images/aaai5x.png" alt="S(xi,xj) = f (xi)Tf(xj)&#x2215;(||f(xi)||&#x00D7; ||f(xj)||)
 " class="math-display" ></center></td><td class="equation-label">(1)</td></tr></table>
-The hinge loss <span class="cite">(<a 
-href="#Xwan2014deep">Wan et al mbox .<img 
-src="Images/aaai6x.png" alt=":¯  "  class="b" >mbox  2014</a>)</span> is defined
+The hinge loss (Wan et al) is defined
 as:
   <table 
 class="equation"><tr><td><a 
