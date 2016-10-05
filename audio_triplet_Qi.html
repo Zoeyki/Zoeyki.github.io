@@ -73,11 +73,105 @@ the triplet-based network shall be applicable for large-scale
 commercial use due to its high efficiency and great potential
 as the amount of audio data grows.</p>
 <h2>Method formulation</h2>
-<p>  Given a training set $\mathcal{D}=\{ (a_i, v_i )\}_{i=1}^N$, where $a_{i} = \{e_{j,k}\}_{l\times d}$ is an audio track, and $v_{i}$ denotes the version it belongs to. $e_{j,k} \in (0,1) $ indicates audio energy of different frequency bands. $l$ is audio duration and $d$ is the number of frequency bands. Our goal is to learn a similarity metric $S(\cdot,\cdot)$ with $\mathcal{D} $ in order to make a prediction of the similarity degree given a new music pair $( a_j, a_k)$.</p>
-
-<p>  It is impractical to train a classifier for each kind of version since the amount of music of a version is relatively small and the version amount keeps increasing with new music being created. To solve this problem, we learn by distance comparison within triplets. Furthermore, we experiment on segment-level for more precise learning.</p>
-
-<p>  Our framework includes two parts. Firstly, we construct triplets set $\mathcal{\tilde D}$ from $\mathcal{D} $ on segment-level. $\mathcal{\tilde D}=\{ (x_i, x_i^+, x_i^- ) \}_{i=1}^N$, where $x_{i}$ is a music segment, and $x_i^+$ denotes a same version of $x_i$, while $x_i^-$ represents a non-version one. Then, we embed audio with a triplet-based network and form the similarity metric on the embedded feature.</p>
+	<!--l. 71--><p class="noindent" >Given a training set <span 
+class="cmsy-10"><img 
+src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span><span 
+class="cmr-10">= </span><span 
+class="cmsy-10">{</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">a</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmmi-10">,v</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmr-10">)</span><span 
+class="cmsy-10">}</span><sub><span 
+class="cmmi-7">i</span><span 
+class="cmr-7">=1</span></sub><sup><span 
+class="cmmi-7">N</span></sup>, where <span 
+class="cmmi-10">a</span><sub><span 
+class="cmmi-7">i</span></sub> <span 
+class="cmr-10">= </span><span 
+class="cmsy-10">{</span><span 
+class="cmmi-10">e</span><sub><span 
+class="cmmi-7">j,k</span></sub><span 
+class="cmsy-10">}</span><sub><span 
+class="cmmi-7">l</span><span 
+class="cmsy-7">&#x00D7;</span><span 
+class="cmmi-7">d</span></sub>
+    is an audio track, and <span 
+class="cmmi-10">v</span><sub><span 
+class="cmmi-7">i</span></sub> denotes the version it belongs to.
+     <span 
+class="cmmi-10">e</span><sub><span 
+class="cmmi-7">j,k</span></sub> <span 
+class="cmsy-10">&#x2208; </span><span 
+class="cmr-10">(0</span><span 
+class="cmmi-10">,</span><span 
+class="cmr-10">1) </span>indicates audio energy of different frequency bands.
+     <span 
+class="cmmi-10">l </span>is audio duration and <span 
+class="cmmi-10">d </span>is the number of frequency bands. Our
+     goal is to learn a similarity metric <span 
+class="cmmi-10">S</span><span 
+class="cmr-10">(</span><span 
+class="cmsy-10">&#x22C5;</span><span 
+class="cmmi-10">,</span><span 
+class="cmsy-10">&#x22C5;</span><span 
+class="cmr-10">) </span>with <span 
+class="cmsy-10"><img 
+src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span>in order to make
+     a prediction of the similarity degree given a new music pair
+     <span 
+class="cmr-10">(</span><span 
+class="cmmi-10">a</span><sub><span 
+class="cmmi-7">j</span></sub><span 
+class="cmmi-10">,a</span><sub><span 
+class="cmmi-7">k</span></sub><span 
+class="cmr-10">)</span>.
+     <!--l. 73--><p class="indent" >    It is impractical to train a classifier for each kind of version
+     since the amount of music of a version is relatively small and the
+     version amount keeps increasing with new music being created.
+     To solve this problem, we learn by distance comparison within
+     triplets. Furthermore, we experiment on segment-level for more
+     precise learning.
+     <!--l. 75--><p class="indent" >    Our framework includes two parts. Firstly, we construct triplets
+     set <img 
+src="Images/aaai1x.png" alt="&#x02DC;
+D"  class="tilde" > from <span 
+class="cmsy-10"><img 
+src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span>on segment-level. <img 
+src="Images/aaai2x.png" alt="&#x02DC;
+D"  class="tilde" > <span 
+class="cmr-10">= </span><span 
+class="cmsy-10">{</span><span 
+class="cmr-10">(</span><span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmr-7">+</span></sup><span 
+class="cmmi-10">,x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmsy-7">-</span></sup><span 
+class="cmr-10">)</span><span 
+class="cmsy-10">}</span><sub><span 
+class="cmmi-7">i</span><span 
+class="cmr-7">=1</span></sub><sup><span 
+class="cmmi-7">N</span></sup>,
+     where <span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub> is a music segment, and <span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmr-7">+</span></sup> denotes a same version of
+     <span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub>, while <span 
+class="cmmi-10">x</span><sub><span 
+class="cmmi-7">i</span></sub><sup><span 
+class="cmsy-7">-</span></sup> represents a non-version one. Then, we embed
+     audio with a triplet-based network and form the similarity metric
+     on the embedded feature.
 <h3>Audio segmentation and triplets generation</h3>
 <p>  We conduct audio segmentation and construct triplets set. We experiment on segment-level for two reasons, focusing on the most significant music part and solving the problem that audio versions of different genres usually vary in length while triplets should have equal length. We encode audio tracks and build an index for efficient segment retrieval to construct triplets.
 <p>  1. A song is originally represented as a sequence of beat-aligned 12-dimensional chroma vectors. For easy indexing and computational simplicity, chroma vectors are encoded into binary codes, in a way that the dissimilarity between two original vectors is well approximated by the Hamming distance between the two codes. Concretely, the code of a vector contains two parts. One part concerns the vector itself, consisting of four 12-bit sub-codes. In each sub-code, the bits corresponding to the top m largest bins of the vector are set to 1 and others 0, with m being 6, 5, 3 and 1 respectively. The other part of a code represents the average of the neighbors of the vector. The average vector is encoded in a similar way but with a lower resolution. As a result, a chroma vector is represented by a 64-bit binary code.</p>
