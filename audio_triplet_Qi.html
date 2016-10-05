@@ -262,7 +262,7 @@ class="cmmi-10">&#x03B8; </span>is updated by
                                                                                                 
                                                                                                 
 <img 
-src="Images/framework.pdf" alt="PIC" class="graphics"><!--tex4ht:graphics  
+src="Images/framework.jpg" alt="PIC" class="graphics"><!--tex4ht:graphics  
 name="aaai3x.png" src="framework.pdf"  
 -->
 <br /> <div class="caption" 
@@ -358,58 +358,10 @@ class="cmmi-10">T </span>denotes the
 <!--l. 114--><p class="indent" >  <a 
  id="x1-3002r1"></a><hr class="float"><div class="float" 
 >
-                                                
-                                                                                                
-                                                                                                
-<div class="tabular"> <table id="TBL-2" class="tabular" 
-cellspacing="0" cellpadding="0" rules="groups" 
-><colgroup id="TBL-2-1g"><col 
-id="TBL-2-1"></colgroup><colgroup id="TBL-2-2g"><col 
-id="TBL-2-2"></colgroup><colgroup id="TBL-2-3g"><col 
-id="TBL-2-3"></colgroup><colgroup id="TBL-2-4g"><col 
-id="TBL-2-4"></colgroup><colgroup id="TBL-2-5g"><col 
-id="TBL-2-5"></colgroup><colgroup id="TBL-2-6g"><col 
-id="TBL-2-6"></colgroup><tr 
-class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
- style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-1"  
-class="td11"> Method  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-2"  
-class="td11"> Jump codes  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-3"  
-class="td11"> DTW   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-4"  
-class="td11"> Cognition  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-5"  
-class="td11"> Triplet  </td>
-</tr><tr 
-class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
- style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-1"  
-class="td11">  Acc      </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-2"  
-class="td11">   77.4%       </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-3"  
-class="td11"> 80.0%  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-4"  
-class="td11">  73.2%     </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-5"  
-class="td11"> 81.2%   </td>
-</tr><tr 
-class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
- style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-1"  
-class="td11">        </td></tr></table></div>
-<br /><div class="caption" 
-><span class="id">Table&#x00A0;1: </span><span  
-class="content">Performances on Query1500</span></div><!--tex4ht:label?: x1-3002r1 -->
-                                                
-                                                                                                
-                                                                                                
-  </div><hr class="endfloat" />
-  </div>
+                                                                                         
 <a 
  id="Q1-1-6"></a>
-<p>  We use the SecondHandSongs dataset (SHSD) which is an official list of cover songs within the Million Song Dataset (MSD) released in 2011. SHSD is the largest public cover song dataset up to now, including 18196 tracks in 5854 cliques. To build our model, we use the training split of SHSD dataset with 11460 tracks and test on the standard Query1500 testing set (including 500 triplets).</p>
 
-<p>  We clip the training audios into segments and experiment on length from 100 to 700 with a step of 50. We randomly sampled 1,000,000 triplets for training and 100,000 for testing, $10$ to $100$ times of our network parameter number complexity which is $O(10^{4})$.</p>
-
-<p>  We experiment on various parameter weights and set the convolution kernel size to 3, pooling size and stride both to 2 for best performance. The first full connection layer has 100 nodes and the second has 50 nodes as output. The triplet network is implemented with Caffe.</p>
-
-<p>  We test the model on the Query1500 data set which is given in the form of $(x_{i},x_i^+,x_i^-)$, first two of the same version and the third different from the first. We calculate querying accuracy by comparing the similarity function results $S(x_{i}, x_i^+)$ and $S(x_{i}, x_i^-)$.</p>
-\begin{equation}
-Acc=\frac{1}{T} \sum_{i=1}^T g(S(x_{i},x_i^+) - S(x_{i},x_i^-))
-\end{equation}
-where $g(c)=1$ if $c<0$ and $g(c)=0$ otherwise. $T$ denotes the number of testing instances. The experiment results are listed below.
 <table border="1px" bordercolor="#000000" cellspacing="0px" style="border-collapse:collapse" align="center">
 <tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
 <tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
