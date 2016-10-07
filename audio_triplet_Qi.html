@@ -42,12 +42,14 @@
 </div>
 <div class="row">
 <h2>Motivation</h2>
+<hr/>
     <p>  
         Existing methods on audio version identification use hand-crafted features, which requires extensive human efforts and experts participation. We propose a triplet-based network for version identification, learning feature representation for a  music automatically.  Triplet-based neural network can learn segment-level features from training data, focusing on the most similar parts between music versions, thereby identical version of a music is detected easily. Extensive experiments demonstrate the effectiveness of our method.
     </p>
 </div>
 <div class="row">
 <h2>Background</h2>
+<hr/>
     <p>  
         A version of a music is a new performance of a previous work. Given a query audio piece, version identification aims to retrieve all the versions in a database. Music version identification has wide application, especially in music copyright monitoring, while it remains challenging due to the variances in tempo, key, instruments, etc. Previous work mainly focus on extracting features from pitch class profiles or chroma, which well capture the tonal content of a music, and have been proved to be more effective than original audio spectrums descriptors such as Mel-frequency cepstrum coefficients.
     </p>
@@ -60,6 +62,7 @@
 </div>
 <div class="row">
 <h2>Method formulation</h2>
+<hr/>
     <!--l. 71-->
     <p class="noindent" >
         Given a training set <span class="cmsy-10"><img src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span><span class="cmr-10">= </span><span class="cmsy-10">{</span><span class="cmr-10">(</span><span class="cmmi-10">a</span><sub><span class="cmmi-7">i</span></sub><span class="cmmi-10">,v</span><sub><span class="cmmi-7">i</span></sub><span class="cmr-10">)</span><span class="cmsy-10">}</span><sub><span class="cmmi-7">i</span><span class="cmr-7">=1</span></sub><sup><span class="cmmi-7">N</span></sup>, where <span class="cmmi-10">a</span><sub><span class="cmmi-7">i</span></sub> <span class="cmr-10">= </span><span class="cmsy-10">{</span><span class="cmmi-10">e</span><sub><span class="cmmi-7">j,k</span></sub><span class="cmsy-10">}</span><sub><span class="cmmi-7">l</span><span class="cmsy-7">&#x00D7;</span><span class="cmmi-7">d</span></sub>is an audio track, and <span class="cmmi-10">v</span><sub><span class="cmmi-7">i</span></sub> denotes the version it belongs to.<span class="cmmi-10">e</span><sub><span class="cmmi-7">j,k</span></sub> <span class="cmsy-10">&#x2208; </span><span class="cmr-10">(0</span><span class="cmmi-10">,</span><span class="cmr-10">1) </span>indicates audio energy of different frequency bands.<span class="cmmi-10">l </span>is audio duration and <span class="cmmi-10">d </span>is the number of frequency bands. Our goal is to learn a similarity metric <span class="cmmi-10">S</span><span class="cmr-10">(</span><span class="cmsy-10">&#x22C5;</span><span class="cmmi-10">,</span><span class="cmsy-10">&#x22C5;</span><span class="cmr-10">) </span>with <span class="cmsy-10"><img src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span>in order to makea prediction of the similarity degree given a new music pair<span class="cmr-10">(</span><span class="cmmi-10">a</span><sub><span class="cmmi-7">j</span></sub><span class="cmmi-10">,a</span><sub><span class="cmmi-7">k</span></sub><span class="cmr-10">)</span>.
@@ -113,6 +116,7 @@
 </div>
 <div class="row">
 <h2>Experiment</h2>
+<hr/>
     <!--l. 102-->
     <p class="noindent" >
         We use the SecondHandSongs dataset (SHSD) which is an official list of cover songs within the Million Song Dataset (MSD) released in 2011. SHSD is the largest public cover song dataset up to now, including 18196 tracks in 5854 cliques. To build our model, we use the training split of SHSD dataset with 11460 tracks and test on the standard Query1500 testing set(including 500 triplets).
@@ -136,6 +140,7 @@
         <tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
         <tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
         </table>
+	<hr/>
 </div>
 <div class="row">
 <h2>Reference</h2>
