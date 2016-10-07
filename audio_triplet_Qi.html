@@ -40,10 +40,13 @@
 		<p> Add: 128th, ZhongGuanCun North Street, Haidian District, Beijing, China
 	</div>
 </div>
+<div class="row">
 <h2>Motivation</h2>
     <p>  
         Existing methods on audio version identification use hand-crafted features, which requires extensive human efforts and experts participation. We propose a triplet-based network for version identification, learning feature representation for a  music automatically.  Triplet-based neural network can learn segment-level features from training data, focusing on the most similar parts between music versions, thereby identical version of a music is detected easily. Extensive experiments demonstrate the effectiveness of our method.
     </p>
+</div>
+<div class="row">
 <h2>Background</h2>
     <p>  
         A version of a music is a new performance of a previous work. Given a query audio piece, version identification aims to retrieve all the versions in a database. Music version identification has wide application, especially in music copyright monitoring, while it remains challenging due to the variances in tempo, key, instruments, etc. Previous work mainly focus on extracting features from pitch class profiles or chroma, which well capture the tonal content of a music, and have been proved to be more effective than original audio spectrums descriptors such as Mel-frequency cepstrum coefficients.
@@ -54,6 +57,8 @@
     <p>  
         Version identification is basically a problem of similarity metric learning. To this end, our goal is to embed the data to a feature space where versions of the same music are close to each other and music from different versions stay relatively far away. We propose a triplet-based neural network, which learns audio similarity from triplet input containing a query audio piece, a same version and a different version. In addition, in order to match music accurately, we conduct the learning process on segment-level instead of song-level. The experiment results demonstrate that our method outperforms hand-crafted ones. Our contribution can be summarized into two-folds. 1) To our knowledge, this is the first time that a triplet deep learning method has been applied to audio metric learning. 2) We propose an end-to-end framework and the triplet-based network shall be applicable for large-scale commercial use due to its high efficiency and great potential as the amount of audio data grows.
     </p>
+</div>
+<div class="row">
 <h2>Method formulation</h2>
     <!--l. 71-->
     <p class="noindent" >
@@ -105,6 +110,8 @@
             </div>
         <hr class="endfigure">
 		</div>
+</div>
+<div class="row">
 <h2>Experiment</h2>
     <!--l. 102-->
     <p class="noindent" >
@@ -129,6 +136,7 @@
         <tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
         <tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
         </table>
+</div>
 <div class="row">
 <h2>Reference</h2>
 <div class="col-sm-12">
@@ -164,10 +172,6 @@
 </div>
 <!-- content end -->
 </div>
-    <div id="disqus_thread"></div>
-	<div class="footer">
-		<p>Edit by Xiaoyu Qi 2016</p>
-	</div>
 </div>
 <script src="main.js"></script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
