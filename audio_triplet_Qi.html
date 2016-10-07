@@ -74,6 +74,9 @@
 			<a id="x1-2001r1"></a>&#x00A0;<img src="Images/3_1.jpg"  alt="PIC" class="graphics"<!--tex4ht:graphics name="encoding.jpg" src="encoding.jpg"  --><br /> <div class="caption" ><span class="id">Figure&#x00A0;1: </span><span  class="content">different version audio</span></div><!--tex4ht:label?: x1-2001r1 -->&#x00A0;
 		</div>
 	</div>
+    <p>
+	As we can see from the above figure, audio of same version share similar pattern in frequency bands of audio spectrum, while a different version usually varies significantly. Meanwhile, same versions may differ in some small section, in tempo, key or other aspects. We tend to capture the most significant feature that versions share.
+    </p>
 </div>
 <div class="row">
 <h2>Method formulation</h2>
@@ -95,10 +98,8 @@
         1. A song is originally represented as a sequence of beat-aligned 12-dimensional chroma vectors. For easy indexing and computational simplicity, chroma vectors are encoded into binary codes, in a way that the dissimilarity between two original vectors is well approximated by the Hamming distance between the two codes. Concretely, the code of a vector contains two parts. One part concerns the vector itself, consisting of four 12-bit sub-codes. In each sub-code, the bits corresponding to the top m largest bins of the vector are set to 1 and others 0, with m being 6, 5, 3 and 1 respectively. The other part of a code represents the average of the neighbors of the vector. The average vector is encoded in a similar way but with a lower resolution. As a result, a chroma vector is represented by a 64-bit binary code.
     </p>
 	<div align="center">
-		<hr id="fig1" class="figure"  >
 		<div class="figure"> <a id="x1-2001r1"></a>&#x00A0;<img src="Images/encoding.jpg"  alt="PIC" class="graphics"<!--tex4ht:graphics name="encoding.jpg" src="encoding.jpg"  --><br /> <div class="caption" ><span class="id">Figure&#x00A0;2: </span><span  class="content">Encoding</span></div><!--tex4ht:label?: x1-2001r1 -->&#x00A0;
 		</div>
-	<hr class="endfigure">
 	</div>
     <p>  
         2. Create a music version dataset D={<span class="cmmi-10">x</span><sub><span class="cmmi-7">1</span></sub>,<span class="cmmi-10">x</span><sub><span class="cmmi-7">2</span></sub>,…,<span class="cmmi-10">x</span><sub><span class="cmmi-7">N</span></sub> }, in which song <span class="cmmi-10">x</span><sub><span class="cmmi-7">i</span></sub> (i∈[1..N]) is represented by a sequence of 64-bit codes, and build a codes index which indicates the occurrences of each unique code in all the songs in D. The codes index is only based on the first parts of codes, without considering the code part for the average vector.
@@ -123,11 +124,9 @@
         <table class="equation" align="center"><tr><td><a id="x1-2003r2"></a><center class="math-display" ><img src="Images/aaai7x.png" alt="   N&#x2211;  +       -L (D; &#x03B8;) =   max (1- S(xi,xi )+ S(xi,xi ),0) i=1" class="math-display" ></center></td><td class="equation-label">(2)</td></tr></table>
     where <span class="cmmi-10">&#x03B8; </span>represents all of the parameters in our model, and <span class="cmmi-10">N</span> denotes the number of training instances. <span class="cmmi-10">&#x03B8; </span>is updated by back-propagation and each base network in the triplet network share the same architecture and parameter weights.
         <div align="center">
-		<hr id="fig2" class="figure"  >
             <div class="figure"> <a id="x1-2001r1"></a>&#x00A0;<img src="Images/framework.jpg"  alt="PIC" class="graphics"<!--tex4ht:graphics name="aaai3x.png" src="framework.pdf"  --><br /> <div class="caption" ><span class="id">Figure&#x00A0;3: </span><span  class="content">Triplet network</span></div><!--tex4ht:label?: x1-2001r1 -->&#x00A0;
             </div>
-        <hr class="endfigure">
-		</div>
+	</div>
 </div>
 <div class="row">
 <h2>Experiment</h2>
@@ -155,10 +154,10 @@
         <tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
         <tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
         </table>
-	<hr/>
 </div>
 <div class="row">
 <h2>Reference</h2>
+<hr/>
 <div class="col-sm-12">
     <dl class="dl-horizontal">
         <dt>bertin2012large</dt>
