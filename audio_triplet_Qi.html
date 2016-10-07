@@ -96,19 +96,47 @@
         <tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
         <tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
         </table>
+<div class="row">
 <h1>Reference</h1>
-    <p>Bertin-Mahieux, T., and Ellis, D. P. 2011. Large-scale cover song recognition using hashed chroma landmarks. In 2011 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics (WASPAA), 117–120. IEEE. 
-    <p>Serra, J. 2011. Identification of versions of the same musical composition by processing audio descriptions. Department of Information and Communication Technologies.
-    <p>van Balen, J.; Bountouridis, D.; Wiering, F.; Veltkamp, R. C.; et al. 2014. Cognition-inspired descriptors for scalable cover song retrieval. In proceedings of the 15th international conference on Music Information Retrieval.
-    <p>Wan, J.; Wang, D.; Hoi, S. C. H.; Wu, P.; Zhu, J.; Zhang, Y.; and Li, J. 2014. Deep learning for content-based image retrieval: A comprehensive study. In Proceedings of the 22nd ACM international conference on Multimedia, 157– 166. ACM.
-    <p>Wu, P.; Hoi, S. C.; Xia, H.; Zhao, P.;Wang, D.; and Miao, C. 2013. Online multimodal deep similarity learning with application to image retrieval. In Proceedings of the 21st ACM international conference on Multimedia, 153–162. ACM.
+<hr/>
+<div class="col-sm-12">
+    <dl class="dl-horizontal">
+        <dt>bertin2012large</dt>
+        <dd>Bertin-Mahieux, T., and Ellis, D. P. 2011. Large-scale cover song recognition using hashed chroma landmarks. In 2011 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics (WASPAA), 117–120. IEEE. 
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>serra2011identification</dt>
+        <dd>Serra, J. 2011. Identification of versions of the same musical composition by processing audio descriptions. Department of Information and Communication Technologies.
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>van2014cognition</dt>
+        <dd>van Balen, J.; Bountouridis, D.; Wiering, F.; Veltkamp, R. C.; et al. 2014. Cognition-inspired descriptors for scalable cover song retrieval. In proceedings of the 15th international conference on Music Information Retrieval.
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>wan2014deep</dt>
+        <dd>Wan, J.; Wang, D.; Hoi, S. C. H.; Wu, P.; Zhu, J.; Zhang, Y.; and Li, J. 2014. Deep learning for content-based image retrieval: A comprehensive study. In Proceedings of the 22nd ACM international conference on Multimedia, 157– 166. ACM.
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>wu2013online</dt>
+        <dd>Wu, P.; Hoi, S. C.; Xia, H.; Zhao, P.;Wang, D.; and Miao, C. 2013. Online multimodal deep similarity learning with application to image retrieval. In Proceedings of the 21st ACM international conference on Multimedia, 153–162. ACM.
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt></dt>
+        <dd></dd>
+    </dl>
+</div>
 <!-- content end -->
 </div>
 <br>
 <br>
     <div id="disqus_thread"></div>
 	<div class="footer">
-		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+		<p>Edit by Xiaoyu Qi 2016</p>
 	</div>
 </div>
 <script src="main.js"></script>
@@ -136,7 +164,6 @@ $(document).ready(function() {
         dataType: "json",
         success: function(data) {
             $("#title").html(data.name);
-            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
             var pagesHtml = pagesTemplate.render({"pages": data.pages});
             $("#pages").append(pagesHtml);
             //path
