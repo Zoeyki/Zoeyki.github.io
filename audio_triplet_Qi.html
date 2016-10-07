@@ -31,10 +31,9 @@ Audio feature learning with triplet-based embedding network
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<h1>Audio feature learning with triplet-based embedding network</h1>
-<h2>Motivation</h2>
+<h1>Motivation</h1>
 <p>  Existing methods on audio version identification use hand-crafted features, which requires extensive human efforts and experts participation. We propose a triplet-based network for version identification, learning feature representation for a  music automatically.  Triplet-based neural network can learn segment-level features from training data, focusing on the most similar parts between music versions, thereby identical version of a music is detected easily. Extensive experiments demonstrate the effectiveness of our method.</p>
-<h2>Background</h2>
+<h1>Background</h1>
 <p>  A version of a music is a new performance of a previous
 work. Given a query audio piece, version identification aims
 to retrieve all the versions in a database. Music version identification
@@ -73,7 +72,7 @@ learning. 2) We propose an end-to-end framework and
 the triplet-based network shall be applicable for large-scale
 commercial use due to its high efficiency and great potential
 as the amount of audio data grows.</p>
-<h2>Method formulation</h2>
+<h1>Method formulation</h1>
 <!--l. 71--><p class="noindent" >Given a training set <span 
 class="cmsy-10"><img 
 src="Images/cmsy10-44.png" alt="D" class="10x-x-44" /> </span><span 
@@ -173,7 +172,7 @@ class="cmmi-7">i</span></sub><sup><span
 class="cmsy-7">-</span></sup> represents a non-version one. Then, we embed
      audio with a triplet-based network and form the similarity metric
      on the embedded feature.
-<h3>Audio segmentation and triplets generation</h3>
+<h2>Audio segmentation and triplets generation</h2>
 <p>  We conduct audio segmentation and construct triplets set. We experiment on segment-level for two reasons, focusing on the most significant music part and solving the problem that audio versions of different genres usually vary in length while triplets should have equal length. We encode audio tracks and build an index for efficient segment retrieval to construct triplets.
 <p>  1. A song is originally represented as a sequence of beat-aligned 12-dimensional chroma vectors. For easy indexing and computational simplicity, chroma vectors are encoded into binary codes, in a way that the dissimilarity between two original vectors is well approximated by the Hamming distance between the two codes. Concretely, the code of a vector contains two parts. One part concerns the vector itself, consisting of four 12-bit sub-codes. In each sub-code, the bits corresponding to the top m largest bins of the vector are set to 1 and others 0, with m being 6, 5, 3 and 1 respectively. The other part of a code represents the average of the neighbors of the vector. The average vector is encoded in a similar way but with a lower resolution. As a result, a chroma vector is represented by a 64-bit binary code.</p>
 <p>  2. Create a music version dataset D={x_1,x_2,…,x_N }, in which song x_i (i∈[1..N]) is represented by a sequence of 64-bit codes, and build a codes index which indicates the occurrences of each unique code in all the songs in D. The codes index is only based on the first parts of codes, without considering the code part for the average vector.</p>
@@ -182,7 +181,7 @@ class="cmsy-7">-</span></sup> represents a non-version one. Then, we embed
 <p>  5. Generate pairs of similar chroma segments betweenS_q and S_l. Only segment pairs with a similarity larger than the threshold u will be selected. For each similar segment pair, randomly select a chroma segment from a different song, to make a chroma segment triplet.</p>
 <p>  6. Return the generated chroma segment triplets.</p>
 
-<h3>Triplet-based network feature learning</h3>
+<h2>Triplet-based network feature learning</h2>
 We propose a
 triplet-based embedding neural network for audio metric
 learning. Given an audio triplet <span 
@@ -274,7 +273,7 @@ class="content">Triplet network</span></div><!--tex4ht:label?: x1-2001r1 -->
                                                                                                 
                                                                                                 
   </div><hr class="endfigure">
-<h2>Experiment</h2>
+<h1>Experiment</h1>
 <!--l. 102--><p class="noindent" >We use the SecondHandSongs dataset (SHSD) which is an
      official list of cover songs within the Million Song Dataset
      (MSD) released in 2011. SHSD is the largest public cover song
@@ -367,7 +366,7 @@ class="cmmi-10">T </span>denotes the
 <tr><th>Method</th><th>Jump codes</th><th>DTW</th><th>Cognition</th><th>Triplet</th>
 <tr><td>Acc</td><td>77.4%</td><td>80.0%</td><td>73.2%</td><td>81.2%</td>
 </table>
-<h2>Reference</h2>
+<h1>Reference</h1>
 <p>Bertin-Mahieux, T., and Ellis, D. P. 2011. Large-scale cover
 song recognition using hashed chroma landmarks. In 2011
 IEEE Workshop on Applications of Signal Processing to Audio
@@ -462,6 +461,6 @@ $(document).ready(function() {
 </html>
 
 .container{
-    width:980px;
+    width:1000px;
     margin: 0 auto;
 }
